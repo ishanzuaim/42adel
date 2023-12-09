@@ -1,0 +1,7 @@
+a.out
+a.out.dSYM
+.vscode/
+functions.h.gch
+.DS_Store
+bsq
+*.o
