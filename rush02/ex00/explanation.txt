@@ -1,0 +1,58 @@
+User can pass in 1 or 2 arguments
+- If 1 argument, its going to be the number that has to be translated (it uses "numbers.dict" thats in the folder as the default reference)
+- If 2 arguments, the first argument is the reference dictionary (keys values, which tells you the text version of a number) and second argument is the number
+
+Makefile
+- running make
+    - converts all c files into object files (.o)
+    - combines all object files and creates the executable
+- make fclean
+    - removes all the object files
+    - removes the executable
+
+**Start of program**
+
+Validation
+- Checks if number of arguments is either 2 or 3, print error otherwise
+- If the number part of the argument starts with -, print error
+
+File reading
+- Create a string array using malloc which is 42 char* long (number of keys in dictionary)
+- It then reads the file using a while loop which exits only when `read` function returns 0 (end of file)
+- Within each loop
+    - It gets the number, and using the number calculate the index so it knows where to store the corresponing value
+    - Then at the next non space character it starts reading the value 
+        - Reads upto a non printable character (newline is non-printable)
+        - The value is then stored at the index (which we got previously) of the string array
+
+Converting number to text
+- From reading the file, it returns the string array.
+- Summary of what the string array is
+    - Each element in the string array contains values from the dictionary
+    - The index is determined based on the key ("zero" is 0, "twenty" is 20, "thirty" is 21, etc)
+- Before processing the number we do some pre-stuff
+    - We first check whether its all 0's, and print "zero" and exit the program (as no other number sequence contains zero)
+    - We then remove all trailing zeros 00001532 -> 1532
+    - We also double check the number is smaller than 39 digits, as thats the limit of what we can look upto
+- Processing and printing the number
+    - We first look at the number of 3 sets and store that as a level. 
+        - eg - 123 would just be level 0, 1234 and 123456 would be level 1 and so on.
+    - Level is needed so we know what to print after we print the three digits. 
+        - 123xxx (one hundred ten **thousand** ...), 23xxxxxx (twenty three **million** ...) 
+    - We call a function that keeps taking in the leading digits upto 3 characters
+        - 1125 would be 1 and 125. 123531 would be 123 and 531.
+    
+    - The 1 to 3 digits we extract above, is then passed to a function that prints.
+    - The function
+        - If digits length is 3 and first element is not '0', we print whatever the number is and "hundred"
+        - Then if digits length is 2
+            - For when its 1x (11, 12, etc). We use that value as the index and print that
+            - In other cases we normalize it to access the correct index (20 -> 20, 30 -> 21, etc) and print that
+        - For if digits length is 1, (this is only looked at if the previous condition is not met) 
+            - Just uses the number as the index to get the text version and print that
+    - Outside the function, using the level, we map it to the thousands/millions/billions and print that out.
+    - We then repeat the steps till level is smaller than 0 (recursion, recalling the funcion)
+
+- We print a new line, free the string array and DONE!
+
+
